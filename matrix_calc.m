@@ -7,45 +7,67 @@ T1 = inv(T1);
 
 %% Tranformations from cubes to end-effector
 
-%Tranformation from the floor of the table to the camera
+%Tranformation from the table to the camera
 
 
-ThetaX = -180;
-ThetaZ = 90;
-Depth = 0.2;
-CubeCentreX = 5; 
-CubeCentreY = 5; 
+thetaX1 = 180;
+thetaZ1 = -90;
+depthOrigin = 0.2; %change this according to hand measured depth 
 
 
-RotationX_CamToTable = [1 0 0; 
-                      0 cos(ThetaX) -sin(ThetaX);
-                      0 sin(ThetaX) cos(ThetaX)];
+rotationX_CamToTable = [1 0 0; 
+                      0 cos(thetaX1) -sin(thetaX1);
+                      0 sin(thetaX1) cos(thetaX1)];
                       
                   
-TranslationX_CamToTable = [CubeCentreX;
+translationX_CamToTable = [0;
                            0;
                            0];
-                           
-                                                 
-% TranslationY_CamToTable = [1 0 0 0;
-%                            0 1 0 0;
-%                            0 0 1 0;
-%                            0 0 0 1];                 
+                                         
                   
-RotationZ_CamToTable = [cos(ThetaZ) -sin(ThetaZ) 0];
-                        sin(ThetaZ) cos(ThetaZ) 0];
+rotationZ_CamToTable = [cos(thetaZ1) -sin(thetaZ1) 0;
+                        sin(thetaZ1) cos(thetaZ1) 0;
                         0 0 1];
                         
                     
-TranslationZ_CamToTable = [0;
+translationZ_CamToTable = [0;
                            0;
-                           Depth];
+                           depthOrigin];
                            
 
-Rotation_CamToTable = RotationX_CamToTable*RotationZ_CamToTable
+rotation_CamToTable = rotationX_CamToTable*rotationZ_CamToTable;
 
-%Translation_CamToTable = TranslationX_CamToTable*Depth + 0;
+
+transformTableToCam = [(rotation_CamToTable) [0; 0; depthOrigin]
+                        [0 0 0] 1];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Tranformation from the table to the end-effector
+
+thetaX2 = 180;
+thetaZ2 = -90; 
+offset =          %measure and change value in X
+
+rotationX_TableToEndEff = [1 0 0;
+                         0 cos(thetaX2) -sin(thetaX2);
+                         0 sin(thetaX2) cos(thetaX2)];
+
+translationX_TableToEndEff = [offset;
+                            0;
+                            0];
+                        
+rotationZ_TableToEndEff = [cos(thetaZ2) -sin(thetaZ2) 0;
+                         sin(thetaZ2) cos(thetaZ2) 0;
+                         0 0 1];
+                     
+rotation_TableToEndEff = rotationX_TableToEndEff*rotationZ_TableToEndEff;
+
+transformTableToEndEff = [(rotation_TableToEndEff) [offset; 0; 0]
+                        [0 0 0] 1];
+    
+
                          
+
                   
                   
 
