@@ -1,6 +1,6 @@
 %% Main
 hold off
-image = imread('TEST IMAGE.png');
+image = imread('test_image.png');
 figure, imshow(image);                                  % Show the initial RGB image
 
 %find centre of red cube
