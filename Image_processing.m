@@ -1,8 +1,20 @@
-%% Main
-hold off
-image = imread('test_image.png');
+%% Intialise
+rosinit;
 
-%find centre of red cube
+sub = rossubscriber("camera/color/image_raw");
+
+[msg2] = receive(sub);
+image = readImage(msg2);
+
+%% Main
+
+% while(1)
+[msg2] = receive(sub);
+image = readImage(msg2);
+
+hold off
+
+% %find centre of red cube
 extracted_red = extract_red(image);
 red_centre = calculate_centroid(extracted_red);
 
@@ -23,16 +35,38 @@ imshow(image);
 hold on
 
 scatter(red_centre.Centroid(1), red_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
-text(red_centre.Centroid(1) + 10, red_centre.Centroid(2),'red','FontSize',14,'FontWeight','bold');
+red_u = num2str(round(red_centre.Centroid(1)));
+red_v = num2str(round(red_centre.Centroid(2)));
+red_info = append(red_u,", ",red_v);
+text(red_centre.Centroid(1) + 10, red_centre.Centroid(2), 'red','FontSize',14,'FontWeight','bold');
+text(red_centre.Centroid(1) + 10, red_centre.Centroid(2) + 25, red_info,'FontSize',14,'FontWeight','bold');
 
 scatter(green_centre.Centroid(1), green_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
+green_u = num2str(round(green_centre.Centroid(1)));
+green_v = num2str(round(green_centre.Centroid(2)));
+green_info = append(green_u,", ",green_v);
+text(green_centre.Centroid(1) + 10, green_centre.Centroid(2) + 25, green_info,'FontSize',14,'FontWeight','bold');
 text(green_centre.Centroid(1) + 10, green_centre.Centroid(2),'green','FontSize',14,'FontWeight','bold');
 
 scatter(yellow_centre.Centroid(1), yellow_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
+yellow_u = num2str(round(yellow_centre.Centroid(1)));
+yellow_v = num2str(round(yellow_centre.Centroid(2)));
+yellow_info = append(yellow_u,", ",yellow_v);
+text(yellow_centre.Centroid(1) + 10, yellow_centre.Centroid(2) + 25, yellow_info,'FontSize',14,'FontWeight','bold');
 text(yellow_centre.Centroid(1) + 10, yellow_centre.Centroid(2),'yellow','FontSize',14,'FontWeight','bold');
 
 scatter(purple_centre.Centroid(1), purple_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
+purple_u = num2str(round(purple_centre.Centroid(1)));
+purple_v = num2str(round(purple_centre.Centroid(2)));
+purlpe_info = append(purple_u,", ",purple_v);
+text(purple_centre.Centroid(1) + 10, purple_centre.Centroid(2) + 25, purlpe_info,'FontSize',14,'FontWeight','bold');
 text(purple_centre.Centroid(1) + 10, purple_centre.Centroid(2),'purple','FontSize',14,'FontWeight','bold');
+
+% end
+
+%% Shutdown
+
+rosshutdown;
 
 %% Functions
 

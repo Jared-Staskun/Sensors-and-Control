@@ -11,3 +11,9 @@ Dobot Start up Commands
 3)	sudo chmod 666 /dev/ttyUSB0
 
 4)	roslaunch dobot_magician_driver dobot_magician.launch
+
+Camera Start up Commands
+
+1) source /home/jared/catkin_ws/devel/setup.bash
+
+2) roslaunch realsense2_camera rs_camera.launch
