@@ -1,6 +1,6 @@
 %% Main
 hold off
-image = imread('test_image.png');
+image = imread('TEST IMAGE.png');
 figure, imshow(image);                                  % Show the initial RGB image
 
 %find centre of red cube
@@ -56,29 +56,41 @@ text(purple_centre.Centroid(1) + 10, purple_centre.Centroid(2),'PURPLE','FontSiz
 %   end
 
 % Camera Parameters
- Camera_Focal_Length = 945.224;         % 945.224
- Camera_Principle_Point_X = 959.023;    % 959.023
- Camera_Principle_Point_Y = 532.926;    % 532.926
+ Camera_Focal_Length = (917.6252+915.7077)/2;
+ Camera_Principle_Point_X = 636.2969;
+ Camera_Principle_Point_Y = 351.4231;
 
+% % Move origin to principle point:
+%     % RED
+%         Red_X_L = red_centre.Centroid(1,1) - Camera_Principle_Point_X;
+%         Red_Y_L = red_centre.Centroid(1,2) - Camera_Principle_Point_Y;
+%     % GREEN
+%         Green_X_L = green_centre.Centroid(1,1) - Camera_Principle_Point_X;
+%         Green_Y_L = green_centre.Centroid(1,2) - Camera_Principle_Point_Y;
+%     % YELLOW
+%         Yellow_X_L = yellow_centre.Centroid(1,1) - Camera_Principle_Point_X;
+%         Yellow_Y_L = yellow_centre.Centroid(1,2) - Camera_Principle_Point_Y;
+%     % PURPLE
+%         Purple_X_L = purple_centre.Centroid(1,1) - Camera_Principle_Point_X;
+%         Purple_Y_L = purple_centre.Centroid(1,2) - Camera_Principle_Point_Y;
 % Move origin to principle point:
     % RED
-        Red_X_L = red_centre.Centroid(1,1) - Camera_Principle_Point_X;
-        Red_Y_L = red_centre.Centroid(1,2) - Camera_Principle_Point_Y;
+        Red_X_L = 705 - Camera_Principle_Point_X;
+        Red_Y_L = 462 - Camera_Principle_Point_Y;
     % GREEN
-        Green_X_L = green_centre.Centroid(1,1) - Camera_Principle_Point_X;
-        Green_Y_L = green_centre.Centroid(1,2) - Camera_Principle_Point_Y;
+        Green_X_L = 376 - Camera_Principle_Point_X;
+        Green_Y_L = 452 - Camera_Principle_Point_Y;
     % YELLOW
-        Yellow_X_L = yellow_centre.Centroid(1,1) - Camera_Principle_Point_X;
-        Yellow_Y_L = yellow_centre.Centroid(1,2) - Camera_Principle_Point_Y;
+        Yellow_X_L = 728 - Camera_Principle_Point_X;
+        Yellow_Y_L = 435 - Camera_Principle_Point_Y;
     % PURPLE
-        Purple_X_L = purple_centre.Centroid(1,1) - Camera_Principle_Point_X;
-        Purple_Y_L = purple_centre.Centroid(1,2) - Camera_Principle_Point_Y;
-
+        Purple_X_L = 491 - Camera_Principle_Point_X;
+        Purple_Y_L = 365 - Camera_Principle_Point_Y;
 % Collect Depth (Z value) information from Camera (ROS-SUBSCRIBE???? OR MEASURE)
-    Red_Z_Camera = 0.2;         % Z = 20cm = 0.2m
-    Green_Z_Camera = 0.2;
-    Yellow_Z_Camera = 0.2;
-    Purple_Z_Camera = 0.2;
+    Red_Z_Camera = 550;         % Z = 20cm = 0.2m
+    Green_Z_Camera = 550;       % Z = 560mm = 0.56m
+    Yellow_Z_Camera = 550;
+    Purple_Z_Camera = 550;
 
 % Calculate X and Y Coordinates using already known Z
     Red_X_Camera = (Red_Z_Camera*Red_X_L) / Camera_Focal_Length;
