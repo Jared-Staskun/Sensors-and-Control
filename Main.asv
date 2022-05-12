@@ -222,10 +222,9 @@ tool_state(0);
 
 %% Knock it down
 
-% Code that moves end-effector to the side of the stacked blocks and knocks them over
 pos1 = [0.2687 -0.0758 0.08];
 pos2 = [0.2719 -0.0676 -0.0199];
-pos3 = [0.2689 0.0409 -0.0089];   
+pos3 = [0.2689 0.0409 -0.0089];    % Code that moves end-effector to the side of the staxcked blocks and knocks them over
 
 Move_End_Effector(pos1)
 pause(5)
