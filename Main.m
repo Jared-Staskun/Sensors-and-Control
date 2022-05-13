@@ -7,31 +7,31 @@ fprintf('Intialising...\n');      % A string to indicate that intialisation is c
 
 [safetyStatePublisher,safetyStateMsg] = rospublisher('/dobot_magician/target_safety_status');    % Publisher to publish the DOBOT safety status
 
-safetyStateMsg.Data = 2;
-send(safetyStatePublisher,safetyStateMsg);
+safetyStateMsg.Data = 2;    % Prepare message to initialise and home the dobot
+send(safetyStatePublisher,safetyStateMsg);  % Send the message
 
-[toolStatePub, toolStateMsg] = rospublisher('/dobot_magician/target_tool_state');
-[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose');
-endEffectorPoseSubscriber = rossubscriber('/dobot_magician/end_effector_poses');
+[toolStatePub, toolStateMsg] = rospublisher('/dobot_magician/target_tool_state');   % Publisher to turn the suction gripper on and off
+[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose'); % Publiser to move the end effector to set positions
+endEffectorPoseSubscriber = rossubscriber('/dobot_magician/end_effector_poses'); % Subscriber to get current end effector pose
 
-default_pos = [0.2589,0,-0.0085];   
-ground_level = -0.0589;
+default_pos = [0.2589,0,-0.0085];   % The default pose the robot moves to after initialisation
+ground_level = -0.0589;             % The z value of the end effector when it contacts the ground
 
 %% Robot Safety Status
-currentSafetyStatus = 0;
+currentSafetyStatus = 0;    % Ensure the safety status has been reset
 
-safetyStatusSubscriber = rossubscriber('/dobot_magician/safety_status');
+safetyStatusSubscriber = rossubscriber('/dobot_magician/safety_status');    % Subscriber to get safety status of the robot
 pause(2); %Allow some time for MATLAB to start the subscriber
-while(currentSafetyStatus ~=4)
-    currentSafetyStatus = safetyStatusSubscriber.LatestMessage.Data;
+while(currentSafetyStatus ~=4)      % Safety status 4 => Operating
+    currentSafetyStatus = safetyStatusSubscriber.LatestMessage.Data;        % Wait in the while loop until the robot is ready and in the operating state
 end
 
-fprintf('Safety Loop Done.\n');
+fprintf('Safety Loop Done.\n');     % Print message to console to confirm that the robot is done initialising
 
 %Move dobot out of the way
-out_of_way = [0.0053, -0.2205, 0.0324];
-Move_End_Effector(out_of_way)
-pause(3)
+out_of_way = [0.0053, -0.2205, 0.0324];     % Position of end effector that moves the robot arm out of the way of the camera
+Move_End_Effector(out_of_way)               % Move arm out of the camera's view
+pause(3)                                    % Give some time for the arm to get out the way
 
 %% Initialise the Camera
 
@@ -154,28 +154,28 @@ text(blue_centre.Centroid(1) + 10, blue_centre.Centroid(2),'BLUE','FontSize',14,
 % 
 
 %% Movement
-block_height_factor = 0.0300;
+block_height_factor = 0.0300;   % Approximate height of the blocks used in the demo + a small gap
 
 Origin = [0.26925, 0, 0];
 Move_End_Effector(Origin)
 pause(3)
 
 %Red Block
-Move_End_Effector(R_Dobot_10mmTOP)
+Move_End_Effector(R_Dobot_10mmTOP)  % Move directly above the block before appoaching the block
 pause(3)
 Move_End_Effector(R_Dobot_0mmTOP)
 pause(3)
-tool_state(1);
+tool_state(1);  % Suction ON
 pause(3)
 Move_End_Effector(R_Dobot_10mmTOP)
 pause(3)
 
-Drop = [0.26925, 0, (-0.0594 + block_height_factor * 1)];
+Drop = [0.26925, 0, (ground_level + block_height_factor * 1)];   % Move to the position to build the tower. Z is the ground level height + the height of 1 block
 Move_End_Effector(Drop)
 pause(3)
-tool_state(0);
+tool_state(0);  % Suction OFF
 
-%Yellow Block
+%Yellow Block - Very similar to process to red block
 Move_End_Effector(Y_Dobot_10mmTOP)
 pause(3)
 Move_End_Effector(Y_Dobot_0mmTOP)
@@ -185,7 +185,7 @@ pause(3)
 Move_End_Effector(Y_Dobot_10mmTOP)
 pause(3)
 
-Drop = [0.26925, 0, (-0.0594 + block_height_factor * 2)];
+Drop = [0.26925, 0, (ground_level + block_height_factor * 2)]; % Block height factor multiplied by 2 as there is now 2 blocks between end effector and ground
 Move_End_Effector(Drop)
 pause(3)
 tool_state(0);
@@ -200,7 +200,7 @@ pause(3)
 Move_End_Effector(G_Dobot_10mmTOP)
 pause(3)
 
-Drop = [0.26925, 0, (-0.0594 + block_height_factor * 3)];
+Drop = [0.26925, 0, (ground_level + block_height_factor * 3)];
 Move_End_Effector(Drop)
 pause(3)
 tool_state(0);
@@ -215,7 +215,7 @@ pause(3)
 Move_End_Effector(B_Dobot_10mmTOP)
 pause(3)
 
-Drop = [0.26925, 0, (-0.0594 + block_height_factor * 4)];
+Drop = [0.26925, 0, (ground_level + block_height_factor * 4)];
 Move_End_Effector(Drop)
 pause(3)
 tool_state(0);
@@ -332,6 +332,6 @@ end
 
 function [object_centre] = calculate_centroid(BW_object)
 %Calculate the coordinates of the pixel group of white pixels
-target_object = bwareafilt(BW_object,1);
-object_centre = regionprops(target_object,'centroid');
+    target_object = bwareafilt(BW_object,1);                    % Isolates the biggest group of white pixels in a black and while image
+    object_centre = regionprops(target_object,'centroid');      % Find the centriod of the isolated pixels from the previous function
 end
