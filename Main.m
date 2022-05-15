@@ -7,12 +7,17 @@ fprintf('Intialising...\n');      % A string to indicate that intialisation is c
 
 [safetyStatePublisher,safetyStateMsg] = rospublisher('/dobot_magician/target_safety_status');    % Publisher to publish the DOBOT safety status
 
-safetyStateMsg.Data = 2;    % Prepare message to initialise and home the dobot
+safetyStateMsg.Data = 2;                    % Prepare message to initialise and home the dobot
 send(safetyStatePublisher,safetyStateMsg);  % Send the message
 
-[toolStatePub, toolStateMsg] = rospublisher('/dobot_magician/target_tool_state');   % Publisher to turn the suction gripper on and off
-[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose'); % Publiser to move the end effector to set positions
-endEffectorPoseSubscriber = rossubscriber('/dobot_magician/end_effector_poses'); % Subscriber to get current end effector pose
+% Publisher to turn the suction gripper on and off
+[toolStatePub, toolStateMsg] = rospublisher('/dobot_magician/target_tool_state');  
+
+% Publiser to move the end effector to set positions
+[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose'); 
+
+% Subscriber to get current end effector pose
+endEffectorPoseSubscriber = rossubscriber('/dobot_magician/end_effector_poses'); 
 
 default_pos = [0.2589,0,-0.0085];   % The default pose the robot moves to after initialisation
 ground_level = -0.0589;             % The z value of the end effector when it contacts the ground
@@ -20,10 +25,12 @@ ground_level = -0.0589;             % The z value of the end effector when it co
 %% Robot Safety Status
 currentSafetyStatus = 0;    % Ensure the safety status has been reset
 
-safetyStatusSubscriber = rossubscriber('/dobot_magician/safety_status');    % Subscriber to get safety status of the robot
-pause(2); %Allow some time for MATLAB to start the subscriber
+% Subscriber to get safety status of the robot
+safetyStatusSubscriber = rossubscriber('/dobot_magician/safety_status');
+
+pause(2);                           %Allow some time for MATLAB to start the subscriber
 while(currentSafetyStatus ~=4)      % Safety status 4 => Operating
-    currentSafetyStatus = safetyStatusSubscriber.LatestMessage.Data;        % Wait in the while loop until the robot is ready and in the operating state
+    currentSafetyStatus = safetyStatusSubscriber.LatestMessage.Data;    % Wait in the while loop until the robot is ready and in the operating state
 end
 
 fprintf('Safety Loop Done.\n');     % Print message to console to confirm that the robot is done initialising
@@ -66,17 +73,17 @@ figure, imshow(extracted_blue);
 figure, imshow(image);   % plots RGB image
 hold on
 
-scatter(red_centre.Centroid(1), red_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');   % Displays the cube centroid in pixels with black text
-text(red_centre.Centroid(1) + 10, red_centre.Centroid(2),'RED','FontSize',14,'FontWeight','bold');
+scatter(red_centre.Centroid(1), red_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');        % Displays the red cube centroid in pixels with black text
+text(red_centre.Centroid(1) + 10, red_centre.Centroid(2),'RED','FontSize',14,'FontWeight','bold');                  % Adds the label "RED" next to the block centre                     
 
-scatter(green_centre.Centroid(1), green_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
-text(green_centre.Centroid(1) + 10, green_centre.Centroid(2),'GREEN','FontSize',14,'FontWeight','bold');
+scatter(green_centre.Centroid(1), green_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');    % Displays the green cube centroid in pixels with black text
+text(green_centre.Centroid(1) + 10, green_centre.Centroid(2),'GREEN','FontSize',14,'FontWeight','bold');            % Adds the label "GREEN" next to the block centre    
 
-scatter(yellow_centre.Centroid(1), yellow_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
-text(yellow_centre.Centroid(1) + 10, yellow_centre.Centroid(2),'YELLOW','FontSize',14,'FontWeight','bold');
+scatter(yellow_centre.Centroid(1), yellow_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');  % Displays the yellow cube centroid in pixels with black text
+text(yellow_centre.Centroid(1) + 10, yellow_centre.Centroid(2),'YELLOW','FontSize',14,'FontWeight','bold');         % Adds the label "YELLOW" next to the block centre    
 
-scatter(blue_centre.Centroid(1), blue_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');
-text(blue_centre.Centroid(1) + 10, blue_centre.Centroid(2),'BLUE','FontSize',14,'FontWeight','bold');
+scatter(blue_centre.Centroid(1), blue_centre.Centroid(2),'MarkerFaceColor','black','MarkerEdgeColor','black');      % Displays the blue cube centroid in pixels with black text
+text(blue_centre.Centroid(1) + 10, blue_centre.Centroid(2),'BLUE','FontSize',14,'FontWeight','bold');               % Adds the label "BLUE" next to the block centre    
 
 %% Calculate Coordinates
 
@@ -87,7 +94,7 @@ text(blue_centre.Centroid(1) + 10, blue_centre.Centroid(2),'BLUE','FontSize',14,
  PPx = 636.2969;
  PPy = 351.4231;
 
-% % Move origin to principle point:
+% % Move image origin to the principle point:
     % RED
         Red_X_L = red_centre.Centroid(1,1) - PPx;
         Red_Y_L = red_centre.Centroid(1,2) - PPy;
@@ -105,7 +112,7 @@ text(blue_centre.Centroid(1) + 10, blue_centre.Centroid(2),'BLUE','FontSize',14,
     Z_Cam_To_Block = 557/1000;         % Z = 557mm = 0.557m
 
 % Calculate X and Y Coordinates using already known Z
-    Red_X_Camera = (Z_Cam_To_Block*Red_X_L) / FL;
+    Red_X_Camera = (Z_Cam_To_Block*Red_X_L) / FL;    % From Triangulation : X = (Z*x_L)/F
     Red_Y_Camera = (Z_Cam_To_Block*Red_Y_L) / FL;
 
     Green_X_Camera = (Z_Cam_To_Block*Green_X_L) / FL;
@@ -158,20 +165,22 @@ block_height_factor = 0.0300;   % Approximate height of the blocks used in the d
 
 Origin = [0.26925, 0, 0];
 Move_End_Effector(Origin)
-pause(3)
+pause(3)                        % Necessary delay so that movement commands have time
+                                % to finish before the next movement starts
+                         
 
 %Red Block
 Move_End_Effector(R_Dobot_10mmTOP)  % Move directly above the block before appoaching the block
 pause(3)
-Move_End_Effector(R_Dobot_0mmTOP)
+Move_End_Effector(R_Dobot_0mmTOP)   % Lower end-effector onto block
 pause(3)
 tool_state(1);  % Suction ON
 pause(3)
-Move_End_Effector(R_Dobot_10mmTOP)
+Move_End_Effector(R_Dobot_10mmTOP)  % Raise the end-effector, now holding the cube
 pause(3)
 
-Drop = [0.26925, 0, (ground_level + block_height_factor * 1)];   % Move to the position to build the tower. Z is the ground level height + the height of 1 block
-Move_End_Effector(Drop)
+Drop = [0.26925, 0, (ground_level + block_height_factor * 1)];   % Move to the position to build the tower. Z is: 
+Move_End_Effector(Drop)                                          % ground level height + the height of 1 block
 pause(3)
 tool_state(0);  % Suction OFF
 
@@ -235,7 +244,7 @@ Move_End_Effector(pos3)
 
 %% Functions
 
-function [BW_object] = extract_red(image)
+function [BW_object]
 %Isolate red objects and return black and white image of isolated objects
     % Convert RGB image to chosen color space
     I = rgb2hsv(image);
