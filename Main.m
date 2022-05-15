@@ -235,7 +235,7 @@ Move_End_Effector(pos3)
 
 %% Functions
 
-function [BW_object]
+function [BW_object] = extract_red(image)
 %Isolate red objects and return black and white image of isolated objects
     % Convert RGB image to chosen color space
     I = rgb2hsv(image);
