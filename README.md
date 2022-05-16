@@ -1,5 +1,11 @@
 # Sensors-and-Control
 
+Individual Code Contribution:
+
+*Jared Staskun - 
+*Vearinama Kila - 13211863
+*Cameron Sarkis - 12578833
+
 The essential libraries must first be setup up in order to complete initialistaion of the code. The following links
 
 https://github.com/gapaul/dobot_magician_driver
