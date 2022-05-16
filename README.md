@@ -37,7 +37,10 @@ Camera Start up Commands
 Code Outline:
 
 Using rostopics to obtain data from the Dobot Magician and the Intel RealSense Camera, the environment of the setup is perceived. After ROS subscribers and the Dobot are initialised, the Dobot moves out of the camera feed, as to not obstruct the camera from seeing the blocks. 
-The RGB image of the camera is stored and crossed check by Colour profiles (Hue, Saturation and Value, high and low thresholds), which were calibrated against precaptured images of the coloured blocks. By applying each colour profile, we can segregate the shapes of objects detected in the image by their colour.
+The RGB image of the camera is stored and crossed check by Colour profiles (Hue, Saturation and Value, high and low thresholds), which were calibrated against precaptured images of the coloured blocks. By applying each colour profile, we can segregate the shapes of objects detected in the image by their colour. When segregated, 4 images are stored each only containing the shapes of the coloured blocks which are converted to black and white.
+Then the cube centroids are found and plotted on the RGB image, displaying their coordinates in pixels. 
+
+Afterwards, algorithms are applied, including the Disparity formula used in triangulation
 
 
 
