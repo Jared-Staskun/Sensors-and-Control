@@ -2,9 +2,9 @@
 
 Individual Code Contribution:
 
-*Jared Staskun - 
-*Vearinama Kila - 13211863
-*Cameron Sarkis - 12578833
+*Jared Staskun - 13211863 - 33.3%
+*Vearinama Kila - 12582336 - 33.3%
+*Cameron Sarkis - 12578833 - 33.3%
 
 The essential libraries must first be setup up in order to complete initialistaion of the code. The following links
 
