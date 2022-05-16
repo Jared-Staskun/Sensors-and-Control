@@ -32,3 +32,14 @@ Camera Start up Commands
 *change -username- to your file path
 
 2) 	roslaunch realsense2_camera rs_camera.launch
+
+
+Code Outline:
+
+Using rostopics to obtain data from the Dobot Magician and the Intel RealSense Camera, the environment of the setup is perceived. The RGB image of the camera is 
+stored and crossed check by Colour profiles (Hue, Saturation and Value, high and low thresholds), which were calibrated against precaptured images of the coloured
+blocks. By applying each colour profile, we can segregate the shapes of objects deteced in the image by their colour.
+
+
+
+
