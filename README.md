@@ -40,7 +40,7 @@ Using rostopics to obtain data from the Dobot Magician and the Intel RealSense C
 The RGB image of the camera is stored and crossed check by Colour profiles (Hue, Saturation and Value, high and low thresholds), which were calibrated against precaptured images of the coloured blocks. By applying each colour profile, we can segregate the shapes of objects detected in the image by their colour. When segregated, 4 images are stored each only containing the shapes of the coloured blocks which are converted to black and white.
 Then the cube centroids are found and plotted on the RGB image, displaying their coordinates in pixels. 
 
-Afterwards, algorithms are applied, including the Disparity formula used in triangulation
+Afterwards, algorithms are applied, including the Disparity formula used in triangulation change the origin of the image from the top-left corner, to the principal point (centre). Then by using some calibration and further algorithms, the Cube centroids were converted from pixel coordinates to world coordinates. Furthermore, these are transformed to the end-effector coordinate frame of the Dobot Magician. Here on the code is set out to send movement commands to the Dobot to prick up and stack the cloloured blocks in order of Red, Yellow, Green, Blue. The stacking is dont at the principal point of the Camera, so the blocks cannot be placed on the origin point, except for the Red block. Then having stack the four blocks in this order, the end-effector is moved next to the tower of blocks, and knocks them over.
 
 
 
